@@ -21,7 +21,7 @@ for path in /opt/minecraft/*; do
         dirname="$(basename "${path}")"
         OPTIONS+="$COUNTER $dirname off "
         SERVERS[$COUNTER]="$dirname"
-        COUNTER=$COUNTER+1
+        let COUNTER=$COUNTER+1
 done
 
 $DIALOG --backtitle "Minecraft Server Console - $NETWORKNAME" \
