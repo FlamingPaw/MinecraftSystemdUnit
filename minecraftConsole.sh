@@ -17,7 +17,7 @@ OPTIONS=""
 COUNTER=1
 
 for path in /opt/minecraft/*; do
-        [ -d "${path}" ] || continue # if not a directory, skip
+        [ -d "${path}" ] || continue
         dirname="$(basename "${path}")"
         OPTIONS+="$COUNTER $dirname off "
         SERVERS[$COUNTER]="$dirname"
