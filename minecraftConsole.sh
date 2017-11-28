@@ -3,48 +3,49 @@
 set -e
 function cleanup {
         clear
-        echo "Closing Console..."
+        echo "Closing Minecraft Console..."
         chmod 430 $(tty)
-        rm -f $tempfile
+        rm -f $TEMPFILE
 }
 trap cleanup EXIT
 
 DIALOG=${DIALOG=dialog}
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+TEMPFILE=`tempfile 2>/dev/null` || TEMPFILE=/tmp/test$$
 
-options=""
+NETWORKNAME="HeliosGaming"
+OPTIONS=""
 COUNTER=1
 
 for path in /opt/minecraft/*; do
-        [ -d "${path}" ] || continue
+        [ -d "${path}" ] || continue # if not a directory, skip
         dirname="$(basename "${path}")"
-        options+="$COUNTER $dirname off "
-        servers[$COUNTER]="$dirname"
-        let COUNTER=$COUNTER+1
+        OPTIONS+="$COUNTER $dirname off "
+        SERVERS[$COUNTER]="$dirname"
+        COUNTER=$COUNTER+1
 done
 
-$DIALOG --backtitle "HeliosGaming" \
-        --title "Minecraft Server Console" \
-        --radiolist "Select server to connect to:" 10 40 3 $options 2> $tempfile
+$DIALOG --backtitle "Minecraft Server Console - $NETWORKNAME" \
+        --title "Server Selector" \
+        --radiolist "Select server to connect to:" 10 40 3 $OPTIONS 2> $TEMPFILE
 
-retval=$?
+RETVAL=$?
 
-choice=`cat $tempfile`
-case $retval in
+CHOICE=`cat $TEMPFILE`
+case $RETVAL in
         0)
-                server=$choice;;
+                SERVER=$CHOICE;;
         1)
                 exit;;
         255)
                 exit;;
 esac
 
-dialog --backtitle "Minecraft Server Console - HeliosGaming" --title "${servers[$server]}" --yesno "\nTo exit the console press CTRL A + D\n\nDO NOT PRESS CTRL C!\n\nContinue?" 10 40
+dialog --backtitle "Minecraft Server Console - $NETWORKNAME" --title "${SERVERS[$SERVER]}" --yesno "\nTo exit the console press CTRL A + D\n\nDO NOT PRESS CTRL C!\n\nContinue?" 10 40
 
 if [[ "$?" == 0 ]]
         then
                 chmod 666 $(tty)
-                su -c "/usr/bin/screen -r mc-${servers[$server]}" minecraft
+                su -c "/usr/bin/screen -r mc-${SERVERS[$SERVER]}" minecraft
         else
                 exit
 fi
