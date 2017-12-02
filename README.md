@@ -35,5 +35,5 @@ su -c "/opt/minecraft/FTBBeyond/FTBInstall.sh" -s "/bin/bash" minecraft
 To connect to the console to enter commands, run the minecraftConsole.sh interactive script.<br />
 <b>Note</b>: To detach (exit) screen press [STRG] + [A] followed by [D].<br />
 <pre>
-./minecraftConsole.sh
+./minecraftServerManager.sh
 </pre>
